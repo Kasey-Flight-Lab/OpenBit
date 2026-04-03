@@ -21,6 +21,6 @@
 
 
 module program_counter(
-a, x, c,
+
     );
 endmodule
