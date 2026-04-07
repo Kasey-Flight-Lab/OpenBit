@@ -10,12 +10,11 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module program_counter(
     input clk,
 	input rst,
 	input inc,
-	output[7:0] out
+	output[7:0] pc_out
 );
 
 reg[3:0] pc;
@@ -28,6 +27,6 @@ always @(posedge clk, posedge rst) begin
 	end
 end
 
-assign out = pc;
+assign pc_out = pc;
 
 endmodule
