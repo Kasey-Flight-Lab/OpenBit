@@ -16,43 +16,69 @@ reg [7:0] B_tb;
 reg sel_tb;
 wire [7:0] out_tb;
 
+
+integer i;
+integer j;
+integer count;
+reg [7:0] test;
+
+
 addsub uut(.A(A_tb), .B(B_tb), .sel(sel_tb), .out(out_tb));
 
 
 initial begin
+ 
 
-//10 + 10 = 20
-sel_tb = 0;
-A_tb = 10;
-B_tb = 10;
-#50;
-
-//11 + 255 = 10
-A_tb = 11;
-B_tb = 255;
-#50;
-
-//100 + 100 = 200
-A_tb = 100;
-B_tb = 100;
-#50;
-
-//255 - 255 = 0
-sel_tb = 1;
-A_tb = 255;
-B_tb = 255;
-#50;
-
-//0 - 1 = 255 (EXPECTED)
-A_tb = 0;
-B_tb = 1;
-#50;
-
-//255 - 128 = 127
-A_tb = 255;
-B_tb = 128;
-#50;
-
+    count = 0;
+    sel_tb = 0;
+    for (i = 0; i < 256; i=i+1)
+    begin
+        for (j = 0; j < 256; j=j+1)
+        begin
+            A_tb = i;
+            B_tb = j;
+            #1;
+            test = A_tb+B_tb;
+            if (out_tb != test)
+                $display ("ERROR - MISMATCH AT sel_tb=%b A_tb=%h B_tb = %h test = %h out_tb = %h", 
+                sel_tb, A_tb, B_tb, test, out_tb);
+            else
+                count = count + 1;
+            if (count == 100)
+            begin
+                count = 0;
+                $display ("100 CASES PASS");
+            end
+       
+        end
+        
+    end
+    
+    count = 0;
+    sel_tb = 1;
+    for (i = 0; i < 256; i=i+1)
+    begin
+        for (j = 0; j < 256; j=j+1)
+        begin
+            A_tb = i;
+            B_tb = j;
+            #1;
+            test = A_tb-B_tb;
+            if (out_tb !== test)
+                $display ("ERROR - MISMATCH AT sel_tb=%b A_tb=%h B_tb = %h test = %h out_tb = %h", 
+                sel_tb, A_tb, B_tb, test, out_tb);
+            else
+                count = count + 1;
+            if (count == 100)
+            begin
+                count = 0;
+                $display ("100 CASES PASS");
+            end
+       
+        end
+        
+    end
+    $finish;
 end
 
 endmodule
